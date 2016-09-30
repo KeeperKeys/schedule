@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    <meta name="viewport" content="width=device-width">
+    {% block links %}{% endblock %}
+    <style>
+        body, html {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        .header {
+            display: block;
+            width: 100%;
+            background-color: #43aaff;
+            box-sizing: border-box;
+        }
+        .header-navigation_fixed-container {
+            position: fixed;
+            width: 100%;
+            box-sizing: border-box;
+            z-index: 9;
+        }
+        .header-navigation_fixed-container_list {
+            list-style: none;
+            margin: 0;
+            padding: 0 10px 0 0;
+            background: deepskyblue;
+            display: flex;
+            justify-content: flex-end;
+            text-shadow: black 1px 1px 2px;
+        }
+        .header-navigation_fixed-container_list li {
+            transform: skewX(-20deg);
+        }
+        .header-navigation_fixed-container_list a {
+            text-decoration: none;
+            display: block;
+            padding: 1em;
+            color: white;
+            transform: skewX(20deg);
+        }
+        .header-navigation_fixed-container_list li:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        .header-navigation_fixed-container_list li:last-child {
+            padding-right: 20px;
+            margin-right: -20px;
+        }
+        .header-caption {
+            padding: 50px 10px 0 15%;
+            height: 100px;
+            white-space: pre-wrap;
+            font-size: 2em;
+            text-align: left;
+            color: white;
+            text-shadow: black 1px 1px 1px;
+        }
+        .header-caption:first-letter {
+            font-size: 1.3em;
+            vertical-align: -0.05em;
+        }
+        .main-content {
+            display: block;
+            margin: auto;
+            min-height: calc(100% - 250px);
+            width: 80%;
+            min-width: 320px;
+            /*max-width: 1000px;*/
+            border: 1px solid transparent;
+            box-sizing: border-box;
+        }
+        .content {
+            display: block;
+            width: 80%;
+            padding: 10px;
+            border: 1px solid transparent;
+            box-sizing: border-box;
+        }
+        .aside-right {
+            display: block;
+            float: right;
+            width: 20%;
+            padding: 10px;
+            border: 1px solid transparent;
+            box-sizing: border-box;
+        }
+        .footer {
+            display: block;
+            width: 100%;
+            height: 100px;
+            max-height: 100px;
+            border: 1px solid transparent;
+            background-color: #282526;
+            box-sizing: border-box;
+        }
+        @media all and (max-width: 800px) {
+            .header-caption {
+                padding: 50px 10px 0 25%;
+            }
+            .header-navigation_fixed-container_list {
+                justify-content: space-around;
+            }
+        }
+        @media all and (max-width: 600px) {
+            .header-caption {
+                font-size: 1.3em;
+                height: 60px;
+            }
+            .main-content {
+                min-height: calc(100% - 210px);
+            }
+        }
+
+    </style>
+    {% block style %}{% endblock %}
+</head>
+<body>
+<header class="header">
+    <nav class="header-navigation_fixed-container">
+        <ul class="header-navigation_fixed-container_list">
+            <li><a href="/">Главная</a></li>
+            <li><a href="#">Контент</a></li>
+            <li><a href="#">Контакты</a></li>
+            {% if request.user.is_authenticated %}
+                <li><a href="/accounts/loggedout/">Выйти</a></li>
+            {% else %}
+                <li><a href="/accounts/login/">Войти</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <div class="header-caption">&copy;овершенно<br>не тематический сайт</div>
+</header>
+<div class="main-content">
+    <aside class="aside-right">
+        {% block aside-right %}{% endblock %}
+    </aside>
+    <main class="content">
+        {% block content %}{% endblock %}
+    </main>
+</div>
+<footer class="footer">
+    {% block footer %}{% endblock %}
+</footer>
+<script>
+    {% block script %}{% endblock %}
+</script>
+</body>
+</html>

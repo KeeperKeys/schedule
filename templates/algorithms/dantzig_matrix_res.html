@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block style %}
+    <style>
+        .matrix-table tr td:first-child {
+            font-weight: bold;
+        }
+
+        .matrix-table {
+{#            margin-left: 20px;#}
+            page-break-before: auto;
+        }
+
+        .break-matrix {
+            page-break-before: auto;
+        }
+
+        @media print {
+            .aside-right {
+                width: 1px;
+                display: none;
+            }
+
+            .header {
+                display: none;
+            }
+
+            .footer {
+                display: none;
+            }
+
+            .main-content {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .content {
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <h1>Пошаговое решение</h1>
+    {{ res_html_alphabetic|safe }}
+{% endblock %}

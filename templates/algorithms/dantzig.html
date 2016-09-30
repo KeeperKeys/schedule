@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Алгоритм Данцига</h1>
+    <p>Введите размерности матрицы в поле ниже.</p>
+    <form action="" method="get">
+    <label for="id_dimension">Размерность матрицы</label>
+    {{ form.dimension }}
+    <input type="submit" value="Submit">
+    </form>
+{% endblock %}

@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% block style %}
+    <style>
+        .lesson_information {
+            background: #dfdfdf;
+            min-width: 100%;
+            margin-left: -20%;
+            padding: 5px 0 5px calc(20px + 20%);
+        {#            -moz-column-count: 2;#}{#            -webkit-column-count: 2;#}{#            column-count: 2;#}{#            -moz-column-gap: 10px;#}{#            -webkit-column-gap: 10px;#}{#            column-gap: 10px;#}
+        }
+        {#        .lesson_information .by-width{#}
+        {#            -webkit-column-span: all;#}
+        {#            column-span: all;#}
+        {#        }#}
+        {#        .lesson_information h1 {#}
+        {#            text-shadow: #a3a3a3 2px 2px 4px;#}
+        {#            -webkit-column-span: all;#}
+        {#            column-span: all;#}
+        {#        }#}
+        .lesson_information a:link {
+            color: #666;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .lesson_information a:visited {
+            color: #999999;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .lesson_information a:active,
+        .lesson_information a:hover {
+            color: #bd5a35;
+            text-decoration: underline;
+        }
+        .teachers-comments {
+            padding: 10px 20px 20px 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 30%;
+            border-radius: 30px;
+            border: 3px solid transparent;
+            min-width: 400px;
+            max-width: 800px;
+            width: 72%;
+            background-color: #c7d8fa;
+            box-sizing: border-box;
+        }
+        .teachers-comments .caption-comments {
+            display: inline-block;
+        }
+        .teachers-comments .date-time-comments {
+            display: inline-block;
+            float: right;
+        }
+        .teachers-comments .comment {
+            display: inline-block;
+            padding-bottom: 20px;
+        }
+        .teachers-comments .sender {
+            display: inline-block;
+            margin-top: -7px;
+            float: right;
+        }
+        .triangle-down-right {
+            margin-top: -15px;
+            margin-left: 91%;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #c7d8fa;
+            transform: rotate(-10deg);
+        }
+        .students-comments {
+            padding: 10px 20px 20px 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        {#            margin-left: 30%;#} border-radius: 30px;
+            border: 3px solid transparent;
+            min-width: 400px;
+            max-width: 800px;
+            width: 72%;
+            background-color: #b4faab;
+            box-sizing: border-box;
+        }
+        .students-comments .caption-comments {
+            display: inline-block;
+        }
+        .students-comments .date-time-comments {
+            display: inline-block;
+            float: right;
+        }
+        .students-comments .comment {
+            display: inline-block;
+            padding-bottom: 20px;
+        }
+        .students-comments .sender {
+            display: inline-block;
+            margin-top: -7px;
+            float: right;
+        }
+        .triangle-down-left {
+            margin-top: -15px;
+            margin-left: 8%;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #b4faab;
+            transform: rotate(10deg);
+        }
+        #teachers-comment_id, #students-comment_id {
+            width: 85%;
+            height: 100px;
+            resize: none;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="lesson_information">
+        <h1>Информация о занятии</h1>
+
+        <p><label>Номер группы: </label><a href="/groups/{{ lesson.group.title_en|lower }}/">{{ lesson.group }}</a></p>
+
+        <p><label>Название дисциплины: </label>{{ lesson.title_discipline }}</p>
+        {% if lesson.teacher %}
+            <p><label>Преподаватель: </label>{{ lesson.teacher }}</p>
+        {% else %}
+            <p><label>Преподаватель: </label>{{ null_res }}</p>
+        {% endif %}
+        <p><label>День недели: </label>{{ lesson.weekday }}</p>
+
+        <p><label>Время начала: </label>{{ lesson.time.starting|time:"H:i" }}</p>
+
+        <p><label>Время окончания: </label>{{ lesson.time.ending|time:"H:i" }}</p>
+        {% if lesson.week == 'both' %}
+            <p><label>Неделя: </label>каждую неделю</p>
+        {% endif %}
+        {% if lesson.week == 'top' %}
+            <p><label>Неделя: </label>по верхней недели</p>
+        {% endif %}
+        {% if lesson.week == 'bottom' %}
+            <p><label>Неделя: </label>по нижней недели</p>
+        {% endif %}
+        {% if lesson.housing %}
+            <p><label>Учебный корпус: </label>{{ lesson.housing.abbreviation_uk }}</p>
+        {% else %}
+            <p><label>Учебный корпус: </label>{{ null_res }}</p>
+        {% endif %}
+        {% if lesson.audience %}
+            <p><label>Аудитория: </label>{{ lesson.audience }}</p>
+        {% else %}
+            <p><label>Аудитория: </label>{{ null_res }}</p>
+        {% endif %}
+    </div>
+    {% for t_comment in teacher_comments %}
+        <div class="teachers-comments">
+            <div class="caption-comments"><label>Тема: </label>{{ t_comment.subject }}</div>
+            <div class="date-time-comments">{{ t_comment.date_time }}</div>
+            <p>Комментарий:</p>
+
+            <div class="comment">{{ t_comment.comment }}</div>
+            <div class="sender">{{ t_comment.sender }}</div>
+        </div>
+        <div class="triangle-down-right"></div>
+    {% endfor %}
+
+    {% if is_staff %}
+        <div class="teachers-comments">
+            <form action="." method="post"> {% csrf_token %}
+                <div class="caption-comments">
+                    <label for="teachers-caption_id">Тема: </label>
+                    <input type="text" id="teachers-caption_id" name="subject" required>
+                </div>
+                <p><label for="teachers-comment_id">Комментарий:</label></p>
+                <textarea id="teachers-comment_id" name="comment" required></textarea>
+                <input type="submit">
+            </form>
+        </div>
+        <div class="triangle-down-right"></div>
+    {% endif %}
+
+    {% for s_comment in students_comments %}
+        <div class="students-comments">
+            <div class="caption-comments"><label>Тема: </label>{{ s_comment.subject }}</div>
+            <div class="date-time-comments">{{ s_comment.date_time }}</div>
+            <p>Комментарий:</p>
+
+            <div class="comment">{{ s_comment.comment }}</div>
+            <div class="sender">{{ s_comment.sender }}</div>
+        </div>
+        <div class="triangle-down-left"></div>
+    {% endfor %}
+
+    {% if not_staff %}
+        <div class="students-comments">
+            <form action="." method="post"> {% csrf_token %}
+                <div class="caption-comments">
+                    <label for="students-caption_id">Тема: </label>
+                    <input type="text" id="students-caption_id" name="subject" required>
+                </div>
+                <p><label for="students-comment_id">Комментарий:</label></p>
+                <textarea id="students-comment_id" name="comment" required></textarea>
+                <input type="submit">
+            </form>
+        </div>
+        <div class="triangle-down-left"></div>
+    {% endif %}
+{% endblock %}

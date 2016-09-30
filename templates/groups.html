@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <ul>
+        {% for group in groups %}
+            <li><a href="/groups/{{ group.title_en|lower }}/">{{ group }}</a><a
+                    href="/groups/{{ group.title_en|lower }}/pdf"> (Скачать pdf)</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

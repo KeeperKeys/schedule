@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .simple-little-table {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #666;
+            font-size: 0.9em;
+            text-shadow: 1px 1px 0 #fff;
+            background: #eaebec;
+            margin: 10px;
+            border: #ccc 1px solid;
+            border-collapse: separate;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            -moz-box-shadow: 0 1px 2px #d1d1d1;
+            -webkit-box-shadow: 0 1px 2px #d1d1d1;
+            box-shadow: 0 1px 2px #d1d1d1;
+        }
+        .simple-little-table th {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: bold;
+            padding: 15px;
+            border-top: 1px solid #fafafa;
+            border-bottom: 1px solid #e0e0e0;
+            background: #ededed;
+            background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
+            background: -moz-linear-gradient(top, #ededed, #ebebeb);
+        }
+        .simple-little-table th:first-child {
+            text-align: left;
+            padding-left: 20px;
+        }
+        .simple-little-table tr:first-child th:first-child {
+            -moz-border-radius-topleft: 3px;
+            -webkit-border-top-left-radius: 3px;
+            border-top-left-radius: 3px;
+        }
+        .simple-little-table tr:first-child th:last-child {
+            -moz-border-radius-topright: 3px;
+            -webkit-border-top-right-radius: 3px;
+            border-top-right-radius: 3px;
+        }
+        .simple-little-table tr {
+            text-align: center;
+            padding-left: 20px;
+        }
+        .simple-little-table tr td {
+            min-width: 40px;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 10px;
+            border-top: 1px solid #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            border-left: 1px solid #e0e0e0;
+            background: #fafafa;
+        }
+        .simple-little-table tr:last-child td {
+            border-bottom: 0;
+        }
+        .simple-little-table tr:last-child td:first-child {
+            -moz-border-radius-bottomleft: 3px;
+            -webkit-border-bottom-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+        }
+        .simple-little-table tr:last-child td:last-child {
+            -moz-border-radius-bottomright: 3px;
+            -webkit-border-bottom-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+        {#        .simple-little-table tr:hover td {#}
+        {#            background: #f2f2f2;#}
+        {#            background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));#}
+        {#            background: -moz-linear-gradient(top, #f2f2f2, #f0f0f0);#}
+        {#        }#}
+        .simple-little-table a:link {
+            color: #666;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .simple-little-table a:visited {
+            color: #999999;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .simple-little-table a:active,
+        .simple-little-table a:hover {
+            color: #bd5a35;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<table cellspacing="0" class="simple-little-table">
+    <thead>
+    <tr>
+        <th>День недели</th>
+        <th>Время начала</th>
+        <th>Название дисциплины</th>
+        <th>Корпус</th>
+        <th>Аудитория</th>
+        <th>Преподаватель</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for day in schedule %}
+        {% for time in day.1 %}
+            <tr>
+                {% if forloop.first %}
+                    <td rowspan="12">{{ day.0 }}</td>
+                {% endif %}
+                <td rowspan="2">{{ time.0.starting }}</td>
+                {% with time.1 as lessons %}
+                    {% if lessons|length == 0 %}
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td></tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    {% elif lessons|length == 1 and lessons.0.week == "both" %}
+                        <td title="{{ lessons.0.title_discipline }}"><a
+                                href="{{ forloop.parentloop.counter }}/{{ forloop.counter }}/both/">{{ lessons.0.title_discipline }}</a>
+                        </td>
+
+                        {% if lessons.0.housing %}
+                            <td>{{ lessons.0.housing.abbreviation_uk }}</td>
+                        {% else %}
+                            <td>каф.</td>
+                        {% endif %}
+                        {% if lessons.0.audience %}
+                            <td>{{ lessons.0.audience }}</td>
+                        {% else %}
+                            <td>каф.</td>
+                        {% endif %}
+                        {% if lessons.0.teacher %}
+                            <td title="{{ lessons.0.teacher }}">{{ lessons.0.teacher }}</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        </tr>
+                        <tr></tr>
+                    {% elif lessons|length == 1 and lessons.0.week == "top" %}
+                        <td title="{{ lessons.0.title_discipline }}"><a
+                                href="{{ forloop.parentloop.counter }}/{{ forloop.counter }}/top/">{{ lessons.0.title_discipline }}</a>
+                        </td>
+                        {% if lessons.0.housing %}
+                            <td>{{ lessons.0.housing.abbreviation_uk }}</td>
+                        {% else %}
+                            <td>каф.</td>
+                        {% endif %}
+                        {% if lessons.0.audience %}
+                            <td>{{ lessons.0.audience }}</td>
+                        {% else %}
+                            <td>каф.</td>
+                        {% endif %}
+                        {% if lessons.0.teacher %}
+                            <td title="{{ lessons.0.teacher }}">{{ lessons.0.teacher }}</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    {% elif lessons|length == 1 and lessons.0.week == "bottom" %}
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        </tr>
+                        <tr>
+                            <td title="{{ lessons.0.title_discipline }}"><a
+                                    href="{{ forloop.parentloop.counter }}/{{ forloop.counter }}/bottom/">{{ lessons.0.title_discipline }}</a>
+                            </td>
+                            {% if lessons.0.housing %}
+                                <td>{{ lessons.0.housing.abbreviation_uk }}</td>
+                            {% else %}
+                                <td>каф.</td>
+                            {% endif %}
+                            {% if lessons.0.audience %}
+                                <td>{{ lessons.0.audience }}</td>
+                            {% else %}
+                                <td>каф.</td>
+                            {% endif %}
+                            {% if lessons.0.teacher %}
+                                <td title="{{ lessons.0.teacher }}">{{ lessons.0.teacher }}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        </tr>
+                    {% elif lessons|length == 2 %}
+                        <td title="{{ lessons.0.title_discipline }}"><a
+                                href="{{ forloop.parentloop.counter }}/{{ forloop.counter }}/top/">{{ lessons.0.title_discipline }}</a>
+                        </td>
+                        {% if lessons.0.housing %}
+                            <td>{{ lessons.0.housing.abbreviation_uk }}</td>
+                        {% else %}
+                            <td>каф.</td>
+                        {% endif %}
+                        {% if lessons.0.audience %}
+                            <td>{{ lessons.0.audience }}</td>
+                        {% else %}
+                            <td>каф.</td>
+                        {% endif %}
+                        {% if lessons.0.teacher %}
+                            <td title="{{ lessons.0.teacher }}">{{ lessons.0.teacher }}</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        </tr>
+                        <tr>
+                            <td title="{{ lessons.1.title_discipline }}"><a
+                                    href="{{ forloop.parentloop.counter }}/{{ forloop.counter }}/bottom/">{{ lessons.1.title_discipline }}</a>
+                            </td>
+                            {% if lessons.1.housing %}
+                                <td>{{ lessons.1.housing.abbreviation_uk }}</td>
+                            {% else %}
+                                <td>каф.</td>
+                            {% endif %}
+                            {% if lessons.1.audience %}
+                                <td>{{ lessons.1.audience }}</td>
+                            {% else %}
+                                <td>каф.</td>
+                            {% endif %}
+                            {% if lessons.1.teacher %}
+                                <td title="{{ lessons.1.teacher }}">{{ lessons.1.teacher }}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endwith %}
+        {% endfor %}
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

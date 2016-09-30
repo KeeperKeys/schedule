@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if uservalid %}
+        <p>{{ user }}, если хотите выйти нажмите на ссылку ниже.</p>
+        <a href="accounts/logout/">Выход</a>
+    {% else %}
+        {% if userlogout %}
+            <p>Вы успешно вышли из аккаунта.</p>
+            <p>Больше никакой информации тут нет.</p>
+        {% else %}
+            <p>Вы не авторизованы, кликните на ссылку ниже, чтобы перейти на страницу авторизации.</p>
+            <a href="/accounts/login/">Войти</a>
+        {% endif %}
+    {% endif %}
+{% endblock %}

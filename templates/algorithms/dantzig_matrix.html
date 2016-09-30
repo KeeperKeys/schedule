@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block style %}
+    <style>
+        .input-number {
+            width: 25px;
+            font-size: larger;
+            margin-left: -16px;
+        }
+        .input-label {
+            display: inherit;
+            width: 50px;
+{#            margin-left: -20px;#}
+        }
+        .input-submit {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+        .main-content {
+            width: 90%;
+        }
+        .content {
+            font-size: 12px;
+            width: 100%;
+        }
+        .aside-right {
+            width: 0;
+        }
+        .inline-numbers {
+            display: inline-block;
+            margin: 3px 2px;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <h1>Элементы матрицы</h1>
+
+    <form action="" method="post" name="dantzig-matrix"> {% csrf_token %}
+        {% for i in dimension %}
+            <div style="display: block">
+                {% for j in dimension %}
+                    <div class="inline-numbers">
+                        <label for="id_number{{ i }}{{ j }}" class="input-label">d<sub>{{ i }},{{ j }}</sub></label>
+                        <input type="text" id="id_number{{ i }}{{ j }}" name="number{{ i }}{{ j }}"
+                               maxlength="2"
+                               class="input-number"
+                               value="&#8734">
+                    </div>
+                {% endfor %}
+            </div>
+            {% if forloop.last %}
+                <input type="hidden" value="{{ i }}" name="number_counts" id="id_number_counts">
+            {% endif %}
+        {% endfor %}
+
+        <input type="submit" value="Submit" class="input-submit">
+    </form>
+{% endblock %}
+{% comment %}
+{% block script %}
+    function valid_numbers() {
+        for (var i = 0; i < document.getElementById('id_number_counts').value; i++) {
+
+        }
+    }
+{% endblock %}
+{% endcomment %}
